@@ -1,0 +1,43 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<div class="image-container"  *ngIf="images.length > 0; else noImages">
+  <div class="image-grid" [style.gridTemplateColumns]="'repeat(' + imagesPerRow + ', 1fr)'">
+    <div *ngFor="let image of images; let i = index" class="image-item" (click)="toggleSelection(i)">
+      <div class="image-wrapper">
+        <img [src]="image" alt="Image" [ngStyle]="{'width': imageWidth + 'px', 'height': imageHeight + 'px'}">
+        <input type="checkbox" [(ngModel)]="selectedImages[i]" (change)="updateSelectedImages()" class="checkbox-overlay">
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #noImages>
+  <p>Aucune image disponible.</p>
+</ng-template>
+<div class="controls">
+  <label for="folder-name" class="slide-counter">Label :</label>
+  <input type="text" id="folder-name" [(ngModel)]="fileName" (input)="updateFileName()" class="file-name-input">
+  
+  <label for="duration" class="slide-counter">Durée par défaut :</label>
+  <input type="number" id="duration" value="1" min="1" class="number-input" />
+  
+  <button (click)="selectAllImages()" class="button-container">📌</button>
+  
+  <span class="symbol">-</span>
+  <input type="range" id="range" min="1" max="10"  [value]="imagesPerRow" (input)="onRangeChange($event)" class="styled-range" />
+  <span class="symbol">+</span>
+  
+  <span class="percentage">{{ displayPercentage }}%</span>
+  <p class="slide-counter">Diapositives : {{ selectedImageList.length }} / {{ images.length }}</p>
+  
+  <div class="button-container">
+    <button (click)="downloadSelectedImages()" [disabled]="selectedImageList.length === 0" class="button-container">
+      <span *ngIf="!downloaded">⬇️</span>
+      <span *ngIf="downloaded">✅</span>
+    </button>
+    
+    <button (click)="onResetimage()" class="button-container">🔄</button>
+  </div>
+
+</div>
+
