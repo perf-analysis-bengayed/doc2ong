@@ -18,6 +18,7 @@ export class ConvertPptxComponent {
   constructor(private convertService: ConvertService) { }
 
   ngOnInit() {
+    this.loadImages();
   }
 
   updateFileName(): void {
@@ -57,6 +58,7 @@ export class ConvertPptxComponent {
       (response: { message?: string }) => {
         console.log('Réponse:', response);
         alert(response.message || 'Fichier ajouté avec succès!');
+        this.loadImages();
       },
       (error) => {
         console.error('Erreur:', error);
@@ -90,8 +92,25 @@ export class ConvertPptxComponent {
 
 
 
-
+ 
+  loadImages(): void {
+    try {
+      this.convertService.getImagestest().subscribe(
+        (response) => {
+          this.images = response.images; 
+        },
+        (error) => {
+          this.error = 'Erreur lors du chargement des images.';
+          console.error(error);
+        }
+      );
+    } catch (e: any) {
+      this.error = e.message;
+    }
+  }
   
 
  
 }
+
+
